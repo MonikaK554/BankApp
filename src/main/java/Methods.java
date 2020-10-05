@@ -43,16 +43,16 @@ do {
          String accountType = scanner.nextLine();
 
          if (accountType.equalsIgnoreCase(AccountType.STUDENT.name())) {
-            System.out.println(Client.createClient(name, surname, pesel, AccountType.STUDENT.name()));
+            System.out.println(Client.createClient(name, surname, pesel, AccountType.STUDENT));
 
          }else if (accountType.equalsIgnoreCase(AccountType.PRO.name())) {
-            System.out.println(Client.createClient(name, surname, pesel, AccountType.PRO.name()));
+            System.out.println(Client.createClient(name, surname, pesel, AccountType.PRO));
 
          }else if (accountType.equalsIgnoreCase(AccountType.STANDARD.name())) {
-            System.out.println(Client.createClient(name, surname, pesel, AccountType.STANDARD.name()));
+            System.out.println(Client.createClient(name, surname, pesel, AccountType.STANDARD));
 
          } else if (accountType.equalsIgnoreCase("null")){
-            System.out.println(Client.createClient(name, surname, pesel, "NULL"));
+            System.out.println(Client.createClient(name, surname, pesel, AccountType.NONE));
          }
          else {
             System.out.println("Wpisano niepoprawny typ konta.");

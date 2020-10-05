@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class Account {
 
-    private String accountType;
+    private AccountType accountType;
     private double balance;
     private String accountNumber ="";
-    private List<String> checkingIfAccountNumberIsTrulyUnique = new ArrayList<>();
 
-    public Account(String accountType, double balance) {
+
+    public Account(AccountType accountType, double balance) {
         this.accountType = accountType;
         this.balance = balance;
         accountNumber = createUniqueAccountNumber();
@@ -24,8 +24,8 @@ public class Account {
 
         }
 
-        if (!checkingIfAccountNumberIsTrulyUnique.contains(accountNumber)) { // jezeli lista numerow kont nie zawiera nowego numeru, to go dodaj i zwroc (jest unikalny)
-            checkingIfAccountNumberIsTrulyUnique.add(accountNumber);
+        if (!Bank.accountNumberUniqueList.contains(accountNumber)) { // jezeli lista numerow kont nie zawiera nowego numeru, to go dodaj i zwroc (jest unikalny)
+            Bank.accountNumberUniqueList.add(accountNumber);
             return accountNumber;
         }  else {    // jak ponownie wykonac metodę ? continue nie dziala
             System.out.println("Błędny numer konta");
@@ -33,13 +33,13 @@ public class Account {
         return null;
     }
 
-    public static Account createAccount (String type, double balance){ // metoda do tworzenia rachunku zamiast slowka new
+    public static Account createAccount (AccountType type, double balance){ // metoda do tworzenia rachunku zamiast slowka new
        Account account = new Account(type, balance);
        return account;
   }
 
 
-    public String getAccountType() {
+    public AccountType getAccountType() {
         return accountType;
     }
     public double getBalance() {
