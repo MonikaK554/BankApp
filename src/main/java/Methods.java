@@ -11,6 +11,7 @@ public class Methods {
       Scanner scanner = new Scanner(System.in);
       int choice; // inicjowany przed petla do aby byl widoczny w while
 
+
 do {
 
    System.out.println("Witaj w " + Bank.name + " . Co chcesz zrobic? (Podaj cyfrę od 1 do 7)" + "\n"
@@ -24,7 +25,6 @@ do {
 
    choice = scanner.nextInt();
    scanner.nextLine();
-
 
    switch (choice) {
 

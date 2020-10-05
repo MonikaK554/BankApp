@@ -73,6 +73,7 @@ public class Client {
             id = Bank.createId();
         }
 
+
         public ClientBuilder addNewListOfAccounts(AccountType[] typeOfAccount) { // metoda dodająca konta przy tworzeniu klienta pracujaca na ClientBuilderze (jedno kont na poczatek mozna utworzyc). Potem nastepme ,pzma dpdawac druga metoda
             listOfClientAccounts = new ArrayList<>();
 

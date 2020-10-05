@@ -17,6 +17,7 @@ public class DataValidator {
         System.out.println("Miesiąc " + month);
         System.out.println("Dzień "+day);
 
+
         // zakladamy ze nie ma ludzi urodzonych przed 1910 rokiem // ten if sprawdza poprawnosc rok/miesiac/dzien
         if (peselGivenToString.length() == 11 && year > 10 && month > 0 && month < 13) {
 
