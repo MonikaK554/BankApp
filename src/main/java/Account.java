@@ -30,13 +30,13 @@ public class Account {
             return accountNumber;
         }  else {    // jak ponownie wykonac metodę ? continue nie dziala
             System.out.println("Błędny numer konta");
+            this.createUniqueAccountNumber();
         }
         return null;
     }
 
     public static Account createAccount (AccountType type, double balance){ // metoda do tworzenia rachunku zamiast slowka new
-       Account account = new Account(type, balance);
-       return account;
+       return new Account(type, balance);
   }
 
 

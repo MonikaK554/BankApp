@@ -203,12 +203,16 @@ public class Client {
             System.out.println("Podaj kwotę do wypłaty (pamiętaj, że musi mieścić się ona w zakresie dostępnych śrdoków na koncie)");
             double impact = scanner.nextDouble();
 
-            List<Account> choosenAccount = this.getListOfClientAccounts().stream() //zmiana salda
-                    .filter(account -> account.getAccountType().name().equalsIgnoreCase(choosenAccountType))// znajdz konto ktore wpisal uzytkownik
-                   .collect(Collectors.toList()); // zamien to na typ LIST aby mozna bylo się do tego odnieść w if
+           // List<Account> choosenAccount = this.getListOfClientAccounts().stream() //zmiana salda
+                 //   .filter(account -> account.getAccountType().name().equalsIgnoreCase(choosenAccountType))// znajdz konto ktore wpisal uzytkownik
+                  // .collect(Collectors.toList()); // zamien to na typ LIST aby mozna bylo się do tego odnieść w if
 
-            if (choosenAccount.get(0).getBalance() > impact) {
-                choosenAccount.get(0).setBalance(choosenAccount.get(0).getBalance() - impact);
+            Optional<Account> choosenAccount = this.getListOfClientAccounts().stream() //zmiana salda
+                    .filter(account -> account.getAccountType().name().equalsIgnoreCase(choosenAccountType))// znajdz konto ktore wpisal uzytkownik
+                    .findFirst();
+
+            if (choosenAccount.get().getBalance()> impact) {
+                choosenAccount.get().setBalance(choosenAccount.get().getBalance() - impact);
 
             } else{
                 System.out.println("Brak wystarczających środków na koncie");
