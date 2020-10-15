@@ -1,10 +1,9 @@
 public enum AccountType {
 
     NONE,
-    STUDENT, 
+    STUDENT,
     STANDARD,
     PRO;
-
 
 
 }

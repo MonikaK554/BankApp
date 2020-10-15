@@ -13,9 +13,9 @@ public class DataValidator {
         int month = Integer.parseInt(peselGivenToString.substring(2, 4));
         int day = Integer.parseInt(peselGivenToString.substring(4, 6));
 
-        System.out.println( "Rok urodzenia " + year);
+        System.out.println("Rok urodzenia " + year);
         System.out.println("Miesiąc " + month);
-        System.out.println("Dzień "+day);
+        System.out.println("Dzień " + day);
 
 
         // zakladamy ze nie ma ludzi urodzonych przed 1910 rokiem // ten if sprawdza poprawnosc rok/miesiac/dzien
@@ -63,28 +63,27 @@ public class DataValidator {
         // liczenie sumy kontrolnej
 
         int sum = 1 * Integer.parseInt(peselGivenToString.substring(0, 1)) + // nie moze byc peselGivenToString.indexOf(4) - wyciagane ze stringa tylko musi byc int mnpozony przez int aby byl poprawny wynik
-                3 * Integer.parseInt(peselGivenToString.substring(1, 2))  +
-                7 * Integer.parseInt(peselGivenToString.substring(2, 3))   + // tylko tak uzyskujemy z cyfry zapisanej w stringu realna jej wartosc a nie kod ASCI
-                9 * Integer.parseInt(peselGivenToString.substring(3, 4))  +
-                1 * Integer.parseInt(peselGivenToString.substring(4, 5))  +
+                3 * Integer.parseInt(peselGivenToString.substring(1, 2)) +
+                7 * Integer.parseInt(peselGivenToString.substring(2, 3)) + // tylko tak uzyskujemy z cyfry zapisanej w stringu realna jej wartosc a nie kod ASCI
+                9 * Integer.parseInt(peselGivenToString.substring(3, 4)) +
+                1 * Integer.parseInt(peselGivenToString.substring(4, 5)) +
                 3 * Integer.parseInt(peselGivenToString.substring(5, 6)) +
-                7 * Integer.parseInt(peselGivenToString.substring(6, 7))  +
+                7 * Integer.parseInt(peselGivenToString.substring(6, 7)) +
                 9 * Integer.parseInt(peselGivenToString.substring(7, 8)) +
-                1 * Integer.parseInt(peselGivenToString.substring(8, 9))  +
-                3 * Integer.parseInt(peselGivenToString.substring(9, 10)) ;
+                1 * Integer.parseInt(peselGivenToString.substring(8, 9)) +
+                3 * Integer.parseInt(peselGivenToString.substring(9, 10));
         sum %= 10;
         sum = 10 - sum;
         sum %= 10;
 
-        System.out.println("Suma kontrolna :" +sum);
+        System.out.println("Suma kontrolna :" + sum);
 
 
         if (sum == Integer.parseInt(peselGivenToString.substring(10))) {
             System.out.println("Walidacja nr PESEL przebiegła pomyślnie.");
             return true;                                                        // jak wszystko wyzej spelnione to dojdzie tu i wyrzuci true, jak gdzies wczesniej wyrzuci false to tu juz nie dojdzie
-        }
-        else {
-           return false;
+        } else {
+            return false;
         }
 
     }
@@ -113,9 +112,6 @@ public class DataValidator {
         }
 
     }
-
-
-
 
 
 }
