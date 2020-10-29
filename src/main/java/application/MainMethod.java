@@ -1,6 +1,9 @@
-import java.util.List;
+package application;
+
+import application.Bank;
+import application.CaseMethods;
+
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class MainMethod {
 
@@ -92,7 +95,6 @@ public class MainMethod {
             Thread.sleep(5000);
 
         } while (choice != 7);
-
     }
 }
 

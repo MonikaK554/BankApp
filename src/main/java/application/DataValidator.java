@@ -1,3 +1,5 @@
+package application;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +21,7 @@ public class DataValidator {
 
 
         // zakladamy ze nie ma ludzi urodzonych przed 1910 rokiem // ten if sprawdza poprawnosc rok/miesiac/dzien
-        if (peselGivenToString.length() == 11 && year > 10 && month > 0 && month < 13) {
+        if (peselGivenToString.length() == 11 && month > 0 && month < 13) {
 
             if ((day > 0 && day < 32) && // dla miesiecy z liczba dni do 31 // zostawilam to bo jakby ktos wpisal np 80.
                     (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 ||
@@ -59,7 +61,6 @@ public class DataValidator {
             return false;
         }
 
-
         // liczenie sumy kontrolnej
 
         int sum = 1 * Integer.parseInt(peselGivenToString.substring(0, 1)) + // nie moze byc peselGivenToString.indexOf(4) - wyciagane ze stringa tylko musi byc int mnpozony przez int aby byl poprawny wynik
@@ -85,7 +86,6 @@ public class DataValidator {
         } else {
             return false;
         }
-
     }
 
     public static boolean nameAndSurnameValidator(String nameGiven, String surnameGiven) { // imie i nazwisko nie moze byc null oraz moze zawierac tylko litery
@@ -96,7 +96,6 @@ public class DataValidator {
 
             Matcher nameMatcher = nameAndSurnamePattern.matcher(nameGiven);
             Matcher surnameMatcher = nameAndSurnamePattern.matcher(surnameGiven);
-
 
             if (nameMatcher.matches() && surnameMatcher.matches()) {
                 System.out.println("Walidacja imienia i nazwiska przebiegła pomyślnie.");
@@ -110,8 +109,5 @@ public class DataValidator {
             return false;
 
         }
-
     }
-
-
 }

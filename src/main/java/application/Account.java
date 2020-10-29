@@ -1,13 +1,16 @@
+package application;
+
+import java.math.BigDecimal;
 import java.util.Random;
 
 public class Account {
 
     private AccountType accountType;
-    private double balance;
+    private BigDecimal balance;
     private String accountNumber = "";
 
 
-    public Account(AccountType accountType, double balance) {
+    public Account(AccountType accountType, BigDecimal balance) {
         this.accountType = accountType;
         this.balance = balance;
         accountNumber = createUniqueAccountNumber();
@@ -33,7 +36,7 @@ public class Account {
 
     }
 
-    public static Account createAccount(AccountType type, double balance) { // metoda do tworzenia rachunku zamiast slowka new
+    public static Account createAccount(AccountType type, BigDecimal balance) { // metoda do tworzenia rachunku zamiast slowka new
         return new Account(type, balance);
     }
 
@@ -42,11 +45,11 @@ public class Account {
         return accountType;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -56,7 +59,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" +
+        return "application.Account{" +
                 "accountType='" + accountType + '\'' +
                 ", balance=" + balance +
                 ", accountNumber=" + accountNumber +
