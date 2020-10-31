@@ -15,9 +15,6 @@ public class AccountData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long number;
 
-//    @NotNull - nie tworzymy tej kolumny od razu, ona zostanie stworzona jako wynik relacji i jako klucz obcy
-//    private Long client_id;
-
     @NotNull
     @Column(name = "account_type")
     @Enumerated(value = EnumType.STRING) // aby z enuma wyciagalo stringa
@@ -28,9 +25,10 @@ public class AccountData {
 
     private BigDecimal balance; // moze byc null bo przy nie zalozeniu konta (null) brak numeru konta
 
+
     @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private ClientData client1;
+    @JoinColumn(name = "client_id") // taka kolumna zostanie stworzona w tabeli accounts_data i bedą tu dane z klicza podstawowego encji ClientData - bo takie pole pod spodem
+    private ClientData clientData;
 
     public AccountData () {
 
@@ -44,21 +42,12 @@ public class AccountData {
         this.number = number;
     }
 
-//    public Long getClient_id() {
-//        return client_id;
-//    }
-//
-//    public void setClient_id(Long client_id) {
-//        this.client_id = client_id;
-//    }
-
-
-    public ClientData getClient1() {
-        return client1;
+    public ClientData getClientData() {
+        return clientData;
     }
 
-    public void setClient1(ClientData client1) {
-        this.client1 = client1;
+    public void setClientData(ClientData clientData) {
+        this.clientData = clientData;
     }
 
     public AccountType getAccountType() {
@@ -83,5 +72,16 @@ public class AccountData {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountData{" +
+                "number=" + number +
+                ", accountType=" + accountType +
+                ", accountNumber='" + accountNumber + '\'' +
+                ", balance=" + balance +
+                ", clientData=" + clientData +
+                '}';
     }
 }

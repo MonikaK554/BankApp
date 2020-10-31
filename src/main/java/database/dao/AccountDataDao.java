@@ -1,14 +1,12 @@
 package database.dao;
 
-import application.Client;
 import database.entity.AccountData;
-
 import java.util.List;
 
 public interface AccountDataDao {
 
-    void saveClientAccount(Client client);
-    AccountData findById (Integer id);
+    void save(AccountData accountData); //przy dodawaniu nowego konta dla istniejacego klienta
+    AccountData findByIdAndNo (Integer clientId, Long accountNo); // szukanie po id klienta i numerze porzadkowym konta potem
     List<AccountData> findAll();
-    void deleteById (Integer id);
+    void deleteByNo (Long number);
 }

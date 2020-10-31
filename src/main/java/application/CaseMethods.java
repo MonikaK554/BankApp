@@ -1,17 +1,18 @@
 package application;
 
-import application.AccountType;
-import application.Bank;
+import database.daoImpl.AccountDataImpl;
+import database.daoImpl.ClientDataImpl;
+import database.entity.AccountData;
+import database.entity.ClientData;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class CaseMethods {
 
     static Scanner scanner1 = new Scanner(System.in);
+    static ClientDataImpl clientDataImpl = new ClientDataImpl();
+    static AccountDataImpl accountDataImpl = new AccountDataImpl();
 
     public static void case1() {
 
@@ -25,18 +26,17 @@ public class CaseMethods {
 
             scanner1.nextLine(); //aby pozbyc się pustego znaku (spacji po wpisywaniu naprzemian String, int/long)
 
-            System.out.println("Podaj typ pierwszego konta, jakie chcesz utworzyć (wpisz NONE jeśli nie chcesz w tym momencie zakładać konta).");
-            String accountType = scanner1.nextLine();
+            ClientData clientData = new ClientData();
+            clientData.setName(name);
+            clientData.setSurname(surname);
+            clientData.setPesel(pesel);
+            clientData.setPin(Bank.createPin());
 
-            if (accountType.equalsIgnoreCase(AccountType.NONE.name()) ||
-                    accountType.equalsIgnoreCase(AccountType.STUDENT.name()) ||
-                    accountType.equalsIgnoreCase(AccountType.PRO.name()) ||
-                    accountType.equalsIgnoreCase(AccountType.STANDARD.name())) {
+            clientDataImpl.save(clientData);
+            System.out.println("Klient został utworzony"); // rekord w bazie danych
+            System.out.println("Numer id klienta to: " + clientData.getId());
+            System.out.println("Numer PIN to: " + clientData.getPin());
 
-                System.out.println(Client.createClient(name, surname, pesel, accountType));
-            }
-        } else {
-            System.out.println("Wpisano niepoprawny typ konta.");
         }
     }
 
@@ -44,33 +44,37 @@ public class CaseMethods {
         System.out.println("Podaj pin");
         int clientPin = scanner1.nextInt();
         scanner1.nextLine();
-        Client client2; // definiowany tutaj aby byl widoczny nie tylko w if ponizej ale tez poza if w drugim if
 
-        if (Bank.allClients.stream().anyMatch(client -> client.getPin() == clientPin)) { //sprawdzamy czy pin poprawny (czy jest klient z takim pinem
+        if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin)) {  // jezeli pin jest poprawny
 
-            client2 = Bank.allClients.stream().filter(client -> client.getPin() == clientPin).findAny().get(); // jezeli jest to go wez wyjmij
+            ClientData clientData = clientDataImpl.findByPin(clientPin);  //to znajdz tego klienta i zwroc bo bedzie potrzebny do accountData.setClientData(clientData) przy tworzeniu wiersza w accounts_data
 
-            System.out.println("Podaj typ rachunku, jaki chcesz założyć: " + "\n" + "STUDENT, STANDARD, PRO" + "\n" + "Podaj jedną wartość.");
-            String newAccountType1 = scanner1.nextLine();
+            System.out.println("Podaj typ konta, jakie chcesz utworzyć [STUDENT / STANDARD /PRO].");
+            String accountType = scanner1.nextLine();
 
-            if (newAccountType1.equalsIgnoreCase(AccountType.PRO.name()) || newAccountType1.equalsIgnoreCase(AccountType.STANDARD.name()) ||
-                    newAccountType1.equalsIgnoreCase(AccountType.STUDENT.name())) { // jak pin juz sprawdzone to trzeba sprawdzic czy typ konta do zalozenia podany poprawnie
+            if (accountType.equalsIgnoreCase(AccountType.STUDENT.name()) ||
+                    accountType.equalsIgnoreCase(AccountType.PRO.name()) ||
+                    accountType.equalsIgnoreCase(AccountType.STANDARD.name())) {
 
                 System.out.println("Podaj kwotę salda początkowego:");
                 BigDecimal balance1 = scanner1.nextBigDecimal();
                 scanner1.nextLine();
-                client2.getListOfClientAccounts().add(Account.createAccount(AccountType.valueOf(newAccountType1.toUpperCase()), balance1));
-                System.out.println("Konto zosało utworzone.");
 
-            } else {
-                System.out.println("Wybrano niepoprawny typ konta");
+                AccountData accountData = new AccountData(); // tworzymy nowy wiersz tabeli accounts_data i ustawiamy parametry
+
+                accountData.setAccountType(AccountType.valueOf(accountType.toUpperCase()));
+                accountData.setBalance(balance1);
+                accountData.setAccountNumber(Account.createUniqueAccountNumber());
+                accountData.setClientData(clientData); // stad wezmie id_clienta
+
+                accountDataImpl.save(accountData);
+
             }
-
         } else {
-            System.out.println("Podano niepoprawny pin");
+            System.out.println("Podano niepoprawny PIN.");
             Thread.sleep(2000);
-            //  continue;
         }
+
     }
 
     public static void case3() throws InterruptedException {
@@ -78,33 +82,43 @@ public class CaseMethods {
         System.out.println("Podaj pin");
         int clientPin3 = scanner1.nextInt();
         scanner1.nextLine();
-        Client client3; // definiowany tutaj aby byl widoczny nie tylko w if ponizej ale tez poza if w drugim if
 
-        if (Bank.allClients.stream() // sprawdzamy czy poprawny pin
-                .anyMatch(client -> client.getPin() == clientPin3)) {
+        if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin3)) {
 
-            System.out.println(Bank.allClients.stream().filter(client -> client.getPin() == clientPin3)
-                    .findAny().get().getListOfClientAccounts()); // i wyswietl jego liste rachunkow
+            List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin3).getAccountList();
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
 
         } else {
-            System.out.println("Podano niepoprawny pin");
+            System.out.println("Podano niepoprawny PIN");
             Thread.sleep(2000);
         }
+
     }
 
     public static void case4() throws InterruptedException {
+
         System.out.println("Podaj pin");
         int clientPin4 = scanner1.nextInt();
         scanner1.nextLine();
-        Client client4; // definiowany tutaj aby byl widoczny nie tylko w if ponizej ale tez poza if w drugim if
 
-        if (Bank.allClients.stream() // sprawdzamy czy poprawny pin
-                .anyMatch(client -> client.getPin() == clientPin4)) {
+        if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin4)) {
 
-            client4 = Bank.allClients.stream().filter(client -> client.getPin() == clientPin4)
-                    .findAny().get();
+            Integer clientId = clientDataImpl.findByPin(clientPin4).getId(); // znajdujemy tego klienta, aby potem na podstawie client_id i No znalezc rekord w account_data zmienic jego balance
 
-            client4.cashAdd();
+            List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin4).getAccountList();
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
+
+            System.out.println("Podaj numer porządkowy swojego konta, na które chcesz wpłacić pieniądze.");
+            Long accountNo = scanner1.nextLong();
+
+            AccountData accountData = accountDataImpl.findByIdAndNo(clientId, accountNo);
+
+            System.out.println("Podaj kwotę do wpłaty:");
+            BigDecimal impact = scanner1.nextBigDecimal();
+
+            accountData.setBalance(impact.add(accountData.getBalance())); // dodajemy wplate do konta
+            accountDataImpl.save(accountData); //updatujemy w bazie
+            System.out.println("Nowe saldo wynosi " + accountData.getBalance());
 
         } else {
             System.out.println("Podano niepoprawny");
@@ -113,20 +127,41 @@ public class CaseMethods {
     }
 
     public static void case5() throws InterruptedException {
+
         System.out.println("Podaj pin");
         int clientPin5 = scanner1.nextInt();
         scanner1.nextLine();
-        Client client5; // definiowany tutaj aby byl widoczny nie tylko w if ponizej ale tez poza if w drugim if
 
-        if (Bank.allClients.stream() // sprawdzamy czy poprawny
-                .anyMatch(client -> client.getPin() == clientPin5)) {
+        if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin5)) {
 
-            client5 = Bank.allClients.stream().filter(client -> client.getPin() == clientPin5).findFirst().get();
-            client5.withdrawal();
+            Integer clientId = clientDataImpl.findByPin(clientPin5).getId(); // znajdujemy tego klienta, aby potem na podstawie client_id i No znalezc rekord w account_data zmienic jego balance
+
+            List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin5).getAccountList();
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
+
+            System.out.println("Podaj numer porządkowy swojego konta, z którego chcesz wypłacić pieniądze.");
+            Long accountNo = scanner1.nextLong();
+
+            AccountData accountData = accountDataImpl.findByIdAndNo(clientId, accountNo);
+
+            System.out.println("Podaj kwotę do wypłaty:");
+            BigDecimal impact = scanner1.nextBigDecimal();
+
+            if (accountData.getBalance().subtract(impact).compareTo(BigDecimal.ZERO) > 0) {// sprawdzenie czy na koncie jest wiecej srodkow niz chcemy wyplacic
+
+                accountData.setBalance(accountData.getBalance().subtract(impact)); // robimy wyplate
+                accountDataImpl.save(accountData); //updatujemy w bazie
+                System.out.println("Nowe saldo wynosi " + accountData.getBalance());
+            }else {
+                System.out.println("Nie masz wystarczających środków na koncie.");
+            }
 
         } else {
-            System.out.println("Podano niepoprawne id");
+            System.out.println("Podano niepoprawny PIN");
             Thread.sleep(2000);
         }
+
+
     }
 }
+

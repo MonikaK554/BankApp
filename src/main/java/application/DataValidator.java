@@ -88,6 +88,7 @@ public class DataValidator {
         }
     }
 
+
     public static boolean nameAndSurnameValidator(String nameGiven, String surnameGiven) { // imie i nazwisko nie moze byc null oraz moze zawierac tylko litery
 
         if (nameGiven != null && surnameGiven != null) {

@@ -1,15 +1,19 @@
 package database.dao;
 
-import application.Client;
 import database.entity.ClientData;
 
 import java.util.List;
 
 public interface ClientDataDao {
 
-    void saveClient(Client client); // przekazujemy klienta, zamieniamy go na wiersz w tabeli i zapisujemy do tabeli
-    ClientData findById (Integer id); //zwracamy tu wiersz z tabeli, nie trzeba zwracac obiektu JAVA choc mozna
+    ClientData save(ClientData clientData); // najpierw trzeba stworzyc obiekt wiersz, ustawic mu parametry aa metoda savve odpowiada za zapisanie gotowego obiektu tylko
+    ClientData findByPin (Integer pin);
+    ClientData findById (Integer id);
     List<ClientData> findAll(); //zwracanie listy rekordow z bazy danych a nie z metody Bank.showAllClients()
-    void deleteById (Integer id); // trzeba usunac z dwoch miejsc, z tabeli bazy danych oraz z listy wszystkich klientow z kodu
+    void updateClient (); // juz bez tworzenia nowego wiersza w tabeli
+    void deleteById (Integer id); // usuwamy klienta wraz z jego wszytskimi kontami. Trzeba dodac ON DELETE CASCADE do constraint
+
+
+
 
 }
