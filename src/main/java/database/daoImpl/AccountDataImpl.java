@@ -34,7 +34,7 @@ public class AccountDataImpl implements AccountDataDao {
                     .getSingleResult();
 
         } catch (NoResultException e) {
-            System.out.println("Podano nieprawidłowe dane."); // numer porzadkowy
+
         }
 
         session.getTransaction().commit();

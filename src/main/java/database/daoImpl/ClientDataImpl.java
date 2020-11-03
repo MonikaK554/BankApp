@@ -5,6 +5,7 @@ import database.entity.ClientData;
 import database.utils.HibernateUtils;
 import org.hibernate.Session;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -102,10 +103,14 @@ public class ClientDataImpl implements ClientDataDao {
 
         Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
         session.beginTransaction();
+        try {
+            clientData = session.createQuery("FROM ClientData WHERE id =:id", ClientData.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
 
-        clientData = session.createQuery("FROM ClientData WHERE id =:id", ClientData.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        } catch (NoResultException e) {
+
+        }
 
         session.getTransaction().commit();
         session.close();
