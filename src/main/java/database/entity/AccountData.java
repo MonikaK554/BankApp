@@ -13,7 +13,8 @@ public class AccountData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long number;
+    @Column (name = "account_Id")
+    private Integer accountId;
 
     @NotNull
     @Column(name = "account_type")
@@ -34,12 +35,12 @@ public class AccountData {
 
     }
 
-    public Long getNumber() {
-        return number;
+    public Integer getAccountId() {
+        return accountId;
     }
 
-    public void setNumber(Long number) {
-        this.number = number;
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     public ClientData getClientData() {
@@ -77,7 +78,7 @@ public class AccountData {
     @Override
     public String toString() {
         return "AccountData{" +
-                "number=" + number +
+                "accountId=" + accountId +
                 ", accountType=" + accountType +
                 ", accountNumber='" + accountNumber + '\'' +
                 ", balance=" + balance +

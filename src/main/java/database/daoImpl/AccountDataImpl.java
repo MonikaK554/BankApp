@@ -20,7 +20,7 @@ public class AccountDataImpl implements AccountDataDao {
     }
 
     @Override
-    public AccountData findByIdAndNo(Integer clientId, Long accountNo) {
+    public AccountData findByClientIdAnAccountId(Integer clientId, Integer accountId) {
 
         AccountData accountData = null; // na wypadek gdyby nic nie znalazlo otakim ID i jego numerze porzadkowym konta
 
@@ -28,9 +28,9 @@ public class AccountDataImpl implements AccountDataDao {
         session.beginTransaction();
         try {
 
-            accountData = session.createQuery("FROM AccountData WHERE clientData.id =:id AND number=:no", AccountData.class)
+            accountData = session.createQuery("FROM AccountData WHERE clientData.id =:id AND accountId=:accountId", AccountData.class)
                     .setParameter("id", clientId)
-                    .setParameter("no", accountNo)
+                    .setParameter("accountId", accountId)
                     .getSingleResult();
 
         } catch (NoResultException e) {
@@ -56,13 +56,13 @@ public class AccountDataImpl implements AccountDataDao {
     }
 
     @Override
-    public void deleteByNo(Long number) { // usun po numerze porzadkowym
+    public void deleteByAccountId(Integer accountId) { // usun po numerze porzadkowym
 
         Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
         session.beginTransaction();
 
-        session.createQuery("DELETE AccountData WHERE number=:number")
-                .setParameter("number", number)
+        session.createQuery("DELETE AccountData WHERE accountId=:accountId")
+                .setParameter("accountId", accountId)
                 .executeUpdate();
 
         session.getTransaction().commit();

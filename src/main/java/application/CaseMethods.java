@@ -86,7 +86,7 @@ public class CaseMethods {
         if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin3)) {
 
             List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin3).getAccountList();
-            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
 
         } else {
             System.out.println("Podano niepoprawny PIN");
@@ -106,12 +106,12 @@ public class CaseMethods {
             Integer clientId = clientDataImpl.findByPin(clientPin4).getId(); // znajdujemy tego klienta, aby potem na podstawie client_id i No znalezc rekord w account_data zmienic jego balance
 
             List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin4).getAccountList();
-            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
 
             System.out.println("Podaj numer porządkowy swojego konta, na które chcesz wpłacić pieniądze.");
-            Long accountNo = scanner1.nextLong();
+            Integer accountId = scanner1.nextInt();
 
-            AccountData accountData = accountDataImpl.findByIdAndNo(clientId, accountNo);
+            AccountData accountData = accountDataImpl.findByClientIdAnAccountId(clientId, accountId);
 
             System.out.println("Podaj kwotę do wpłaty:");
             BigDecimal impact = scanner1.nextBigDecimal();
@@ -137,12 +137,12 @@ public class CaseMethods {
             Integer clientId = clientDataImpl.findByPin(clientPin5).getId(); // znajdujemy tego klienta, aby potem na podstawie client_id i No znalezc rekord w account_data zmienic jego balance
 
             List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin5).getAccountList();
-            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
+            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance())); // dziala ale sie brzydko wyswietla. DO POPRAWY. wyswietlamy jego listę
 
             System.out.println("Podaj numer porządkowy swojego konta, z którego chcesz wypłacić pieniądze.");
-            Long accountNo = scanner1.nextLong();
+            Integer accountId = scanner1.nextInt();
 
-            AccountData accountData = accountDataImpl.findByIdAndNo(clientId, accountNo);
+            AccountData accountData = accountDataImpl.findByClientIdAnAccountId(clientId, accountId);
 
             System.out.println("Podaj kwotę do wypłaty:");
             BigDecimal impact = scanner1.nextBigDecimal();

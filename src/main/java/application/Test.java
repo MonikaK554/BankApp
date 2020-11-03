@@ -7,9 +7,9 @@ import org.hibernate.Session;
 public class Test {
     public static void main(String[] args) throws InterruptedException {
 
-        // DatabaseCustomizer.checkConnection();
-        // DatabaseCustomizer.customizeDatabase();
-        application.MainMethod.mainMethod();
+       // DatabaseCustomizer.checkConnection();
+         DatabaseCustomizer.customizeDatabase();
+       // application.MainMethod.mainMethod();
 
 
     }

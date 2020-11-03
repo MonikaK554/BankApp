@@ -78,10 +78,10 @@ public class Bank {
         System.out.println();
 
         List<AccountData> listOfClientAccounts = clientDataImpl.findById(givenId).getAccountList();
-        listOfClientAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getNumber() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
+        listOfClientAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
 
-        Long numberToDelete = scanner.nextLong();
-        accountDataImpl.deleteByNo(numberToDelete);
+        Integer accountIdToDelete = scanner.nextInt();
+        accountDataImpl.deleteByAccountId(accountIdToDelete);
         System.out.println("Konto zostało usunięte.");
 
     }

@@ -51,10 +51,10 @@ class AccountDataImplTest {
         accountData.setAccountNumber(Account.createUniqueAccountNumber());
 
         accountDataDao.save(accountData);
-        AccountData saved = accountDataDao.findByIdAndNo(clientData.getId(), accountData.getNumber());
+        AccountData saved = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
 
         assertNotNull(saved);
-        assertEquals(accountData.getNumber(), saved.getNumber());
+        assertEquals(accountData.getAccountId(), saved.getAccountId());
         assertEquals(accountData.getClientData(), saved.getClientData());
         assertEquals(accountData.getAccountType(), saved.getAccountType());
         assertEquals(accountData.getBalance(), saved.getBalance());
@@ -86,11 +86,11 @@ class AccountDataImplTest {
         session.getTransaction().commit();
         session.close();
 
-        AccountData found = accountDataDao.findByIdAndNo(clientData.getId(), accountData.getNumber());
+        AccountData found = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
 
         assertNotNull(found);
 
-        assertEquals(accountData.getNumber(), found.getNumber());
+        assertEquals(accountData.getAccountId(), found.getAccountId());
         assertEquals(accountData.getClientData(), found.getClientData());
         assertEquals(accountData.getAccountType(), found.getAccountType());
         assertEquals(accountData.getBalance(), found.getBalance());
@@ -137,11 +137,11 @@ class AccountDataImplTest {
 
 
         AccountData loaded = null;
-        if (listOfAllAccounts.get(0).getNumber() == accountData.getNumber()) {
+        if (listOfAllAccounts.get(0).getAccountId() == accountData.getAccountId()) {
             loaded = listOfAllAccounts.get(0);
 
             assertNotNull(loaded);
-            assertEquals(accountData.getNumber(), loaded.getNumber());
+            assertEquals(accountData.getAccountId(), loaded.getAccountId());
             assertEquals(accountData.getClientData(), loaded.getClientData());
             assertEquals(accountData.getAccountType(), loaded.getAccountType());
             assertEquals(accountData.getBalance(), loaded.getBalance());
@@ -151,7 +151,7 @@ class AccountDataImplTest {
             loaded = listOfAllAccounts.get(1);
 
             assertNotNull(loaded);
-            assertEquals(accountData1.getNumber(), loaded.getNumber());
+            assertEquals(accountData1.getAccountId(), loaded.getAccountId());
             assertEquals(accountData1.getClientData(), loaded.getClientData());
             assertEquals(accountData1.getAccountType(), loaded.getAccountType());
             assertEquals(accountData1.getBalance(), loaded.getBalance());
@@ -183,8 +183,8 @@ class AccountDataImplTest {
         session.getTransaction().commit();
         session.close();
 
-        accountDataDao.deleteByNo(accountData.getNumber());
-        AccountData deleted = accountDataDao.findByIdAndNo(clientData.getId(), accountData.getNumber());
+        accountDataDao.deleteByAccountId(accountData.getAccountId());
+        AccountData deleted = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
 
         assertNull(deleted);
     }
