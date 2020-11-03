@@ -62,6 +62,7 @@ public class Bank {
         System.out.println("Podaj id klienta, którego chcesz usunąć.");
         Integer givenId = scanner.nextInt();
 
+        accountDataImpl.deleteAllAccountsWhileDeletingClient(givenId); // najpierw trzeba usunąc wszystkie rachunki a potem klienta bo wiazanie(relacja)
         clientDataImpl.deleteById(givenId);
 
         System.out.println("Operacja usunięcia klienta się powiodła.");

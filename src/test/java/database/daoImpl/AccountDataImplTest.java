@@ -138,7 +138,7 @@ class AccountDataImplTest {
 
 
         AccountData loaded = null;
-        if (listOfAllAccounts.get(0).getAccountId() == accountData.getAccountId()) {
+        if (listOfAllAccounts.get(0).getAccountId().equals(accountData.getAccountId())) {
             loaded = listOfAllAccounts.get(0);
 
             assertNotNull(loaded);
