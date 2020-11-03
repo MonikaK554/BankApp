@@ -28,6 +28,7 @@ class AccountDataImplTest {
 
         session.beginTransaction();
         session.createSQLQuery("DELETE FROM accounts_data").executeUpdate();
+        session.createSQLQuery("DELETE FROM clients_data").executeUpdate();
 
         session.getTransaction().commit();
         session.close();
@@ -62,7 +63,7 @@ class AccountDataImplTest {
     }
 
     @Test
-    void findByIdAndNo() {
+    void findByClientIdAnAccountId() {
 
         ClientData clientData = new ClientData();
         clientData.setName("Anna");
@@ -161,7 +162,7 @@ class AccountDataImplTest {
     }
 
     @Test
-    void deleteByNo() { // twporzym wiersz AccountData, ale zeby go stworzyc to trzeba najpierw swtorzyc klienta
+    void deleteByAccountId() { // twporzym wiersz AccountData, ale zeby go stworzyc to trzeba najpierw swtorzyc klienta
 
         ClientData clientData = new ClientData();
         clientData.setName("Anna");
@@ -187,5 +188,39 @@ class AccountDataImplTest {
         AccountData deleted = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
 
         assertNull(deleted);
+    }
+
+    @Test
+    void deleteAllAccountsWhileDeletingClient() {
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
+
+        clientDataDao.save(clientData);
+
+        AccountData accountData = new AccountData();
+        accountData.setClientData(clientData);
+        accountData.setAccountType(AccountType.PRO);
+        accountData.setBalance(new BigDecimal(1000));
+        accountData.setAccountNumber(Account.createUniqueAccountNumber());
+
+        AccountData accountData1 = new AccountData();
+        accountData1.setClientData(clientData);
+        accountData1.setAccountType(AccountType.STUDENT);
+        accountData1.setBalance(new BigDecimal(500));
+        accountData1.setAccountNumber(Account.createUniqueAccountNumber());
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        session.saveOrUpdate(accountData);
+        session.saveOrUpdate(accountData1);
+        session.getTransaction().commit();
+        session.close();
+
+       accountDataDao.deleteAllAccountsWhileDeletingClient(clientData.getId());
+
+       assertNull(clientData.getAccountList());
     }
 }

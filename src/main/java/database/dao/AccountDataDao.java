@@ -9,4 +9,5 @@ public interface AccountDataDao {
     AccountData findByClientIdAnAccountId (Integer clientId, Integer accountId); // szukanie po id klienta i numerze porzadkowym konta potem
     List<AccountData> findAll();
     void deleteByAccountId (Integer accountId);
+    void deleteAllAccountsWhileDeletingClient (Integer clientId);
 }

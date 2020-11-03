@@ -188,10 +188,13 @@ class ClientDataImplTest {
         session.getTransaction().commit();
         session.close();
 
-        clientDataDao.deleteById(clientData.getId());
-        ClientData deleted = clientDataDao.findById(clientData.getId());
 
-        assertNull(deleted);
+
+        clientDataDao.deleteById(clientData.getId());
+      //  ClientData deleted = clientDataDao.findById(clientData.getId());
+
+
+        assertNull(clientDataDao.findById(clientData.getId()));
 
     }
 

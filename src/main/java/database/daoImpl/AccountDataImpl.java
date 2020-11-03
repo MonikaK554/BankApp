@@ -56,7 +56,7 @@ public class AccountDataImpl implements AccountDataDao {
     }
 
     @Override
-    public void deleteByAccountId(Integer accountId) { // usun po numerze porzadkowym
+    public void deleteByAccountId(Integer accountId) { // usun po numerze porzadkowym wybrane konto klienta
 
         Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
         session.beginTransaction();
@@ -68,6 +68,22 @@ public class AccountDataImpl implements AccountDataDao {
         session.getTransaction().commit();
         session.close();
 
+    }
+
+    @Override
+    public void deleteAllAccountsWhileDeletingClient(Integer clientId) {
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        session.createQuery("DELETE AccountData WHERE clientData.id =:id")
+                .setParameter("id", clientId)
+                .executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
 
     }
+
+
 }

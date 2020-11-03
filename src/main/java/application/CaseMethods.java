@@ -86,7 +86,7 @@ public class CaseMethods {
         if (clientDataImpl.findAll().stream().anyMatch(clientData -> clientData.getPin() == clientPin3)) {
 
             List<AccountData> listOfAllAccounts = clientDataImpl.findByPin(clientPin3).getAccountList();
-            listOfAllAccounts.forEach(accountData -> System.out.println("Numer porządkowy " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
+            listOfAllAccounts.forEach(accountData -> System.out.println("Id konta " + accountData.getAccountId() + " " + accountData.getAccountType() + " " + accountData.getBalance()));
 
         } else {
             System.out.println("Podano niepoprawny PIN");
