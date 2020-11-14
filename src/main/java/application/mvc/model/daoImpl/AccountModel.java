@@ -1,15 +1,15 @@
-package database.daoImpl;
+package application.mvc.model.daoImpl;
 
-import database.dao.AccountDataDao;
-import database.entity.AccountData;
-import database.utils.HibernateUtils;
+import application.mvc.model.dao.AccountDataDao;
+import application.mvc.model.entity.AccountData;
+import application.mvc.model.utils.HibernateUtils;
 import org.hibernate.Session;
 
 import javax.persistence.NoResultException;
 import java.util.List;
 
-public class AccountDataImpl implements AccountDataDao {
-    @Override
+public class AccountModel implements AccountDataDao {
+
     public void save(AccountData accountData) {
 
         Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
@@ -19,7 +19,6 @@ public class AccountDataImpl implements AccountDataDao {
         session.close();
     }
 
-    @Override
     public AccountData findByClientIdAnAccountId(Integer clientId, Integer accountId) {
 
         AccountData accountData = null; // na wypadek gdyby nic nie znalazlo otakim ID i jego numerze porzadkowym konta
@@ -42,35 +41,6 @@ public class AccountDataImpl implements AccountDataDao {
         return accountData;
     }
 
-
-    @Override
-    public List<AccountData> findAll() {
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        List<AccountData> allAccountsFromDatabase = session.createQuery("from AccountData", AccountData.class).list();
-        session.getTransaction().commit();
-        session.close();
-
-        return allAccountsFromDatabase;
-    }
-
-    @Override
-    public void deleteByAccountId(Integer accountId) { // usun po numerze porzadkowym wybrane konto klienta
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        session.createQuery("DELETE AccountData WHERE accountId=:accountId")
-                .setParameter("accountId", accountId)
-                .executeUpdate();
-
-        session.getTransaction().commit();
-        session.close();
-
-    }
-
-    @Override
     public void deleteAllAccountsWhileDeletingClient(Integer clientId) {
 
         Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
@@ -85,5 +55,30 @@ public class AccountDataImpl implements AccountDataDao {
 
     }
 
+
+    public void deleteByAccountId(Integer accountId) { // usun po numerze porzadkowym wybrane konto klienta
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        session.createQuery("DELETE AccountData WHERE accountId=:accountId")
+                .setParameter("accountId", accountId)
+                .executeUpdate();
+
+        session.getTransaction().commit();
+        session.close();
+
+    }
+
+    public List<AccountData> findAll() {
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        List<AccountData> allAccountsFromDatabase = session.createQuery("from AccountData", AccountData.class).list();
+        session.getTransaction().commit();
+        session.close();
+
+        return allAccountsFromDatabase;
+    }
 
 }

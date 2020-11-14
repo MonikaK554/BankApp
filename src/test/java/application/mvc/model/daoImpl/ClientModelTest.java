@@ -1,10 +1,9 @@
-package database.daoImpl;
+package application.mvc.model.daoImpl;
 
-import application.Bank;
-import application.Client;
-import database.dao.ClientDataDao;
-import database.entity.ClientData;
-import database.utils.HibernateUtils;
+import application.additional.Bank;
+import application.mvc.model.dao.ClientDataDao;
+import application.mvc.model.entity.ClientData;
+import application.mvc.model.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,9 +12,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ClientDataImplTest {
+class ClientModelTest {
 
-    private ClientDataDao clientDataDao = new ClientDataImpl();
+    private ClientDataDao clientDataDao = new ClientModel();
 
     @BeforeEach
     void clearTable() {
@@ -62,7 +61,6 @@ class ClientDataImplTest {
 
     @Test
     void findByPin() {
-
         ClientData clientData = new ClientData();
         clientData.setName("Anna");
         clientData.setSurname("Nowak");
@@ -89,8 +87,92 @@ class ClientDataImplTest {
     }
 
     @Test
-    void findAll() {
+    void findById() {
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
 
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        session.saveOrUpdate(clientData);
+
+        session.getTransaction().commit();
+        session.close();
+
+        ClientData foundById = clientDataDao.findById(clientData.getId());
+
+        assertNotNull(foundById);
+        assertEquals(clientData.getId(), foundById.getId());
+        assertEquals(clientData.getName(), foundById.getName());
+        assertEquals(clientData.getSurname(), foundById.getSurname());
+        assertEquals(clientData.getPesel(), foundById.getPesel());
+        assertEquals(clientData.getPin(), foundById.getPin());
+    }
+
+    @Test
+    void getListOfClientAccounts() {
+    }
+
+    @Test
+    void deleteById() {
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        session.saveOrUpdate(clientData);
+
+        session.getTransaction().commit();
+        session.close();
+
+
+
+        clientDataDao.deleteById(clientData.getId());
+      //  ClientData deleted = clientDataDao.findById(clientData.getId());
+
+
+        assertNull(clientDataDao.findById(clientData.getId()));
+
+    }
+
+    @Test
+    void updateClient() {
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+
+        session.saveOrUpdate(clientData);
+        clientData.setSurname("Kowalska");
+        session.saveOrUpdate(clientData);
+
+        session.getTransaction().commit();
+        session.close();
+
+        ClientData updated = clientDataDao.findById(clientData.getId());
+
+        assertNotNull(updated);
+
+        assertEquals(clientData.getId(), updated.getId());
+        assertEquals(clientData.getName(), updated.getName());
+        assertEquals(clientData.getSurname(), updated.getSurname());
+        assertEquals(clientData.getPesel(), updated.getPesel());
+        assertEquals(clientData.getPin(), updated.getPin());
+    }
+
+    @Test
+    void findAll() {
         ClientData clientData = new ClientData();
         clientData.setName("Anna");
         clientData.setSurname("Nowak");
@@ -138,90 +220,5 @@ class ClientDataImplTest {
             assertEquals(clientData1.getPesel(), loaded.getPesel());
             assertEquals(clientData1.getPin(), loaded.getPin());
         }
-    }
-
-    @Test
-    void updateClient() {
-
-        ClientData clientData = new ClientData();
-        clientData.setName("Anna");
-        clientData.setSurname("Nowak");
-        clientData.setPesel(90011250017L);
-        clientData.setPin(Bank.createPin());
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        session.saveOrUpdate(clientData);
-        clientData.setSurname("Kowalska");
-        session.saveOrUpdate(clientData);
-
-        session.getTransaction().commit();
-        session.close();
-
-        ClientData updated = clientDataDao.findById(clientData.getId());
-
-        assertNotNull(updated);
-
-        assertEquals(clientData.getId(), updated.getId());
-        assertEquals(clientData.getName(), updated.getName());
-        assertEquals(clientData.getSurname(), updated.getSurname());
-        assertEquals(clientData.getPesel(), updated.getPesel());
-        assertEquals(clientData.getPin(), updated.getPin());
-
-    }
-
-    @Test
-    void deleteById() {
-
-        ClientData clientData = new ClientData();
-        clientData.setName("Anna");
-        clientData.setSurname("Nowak");
-        clientData.setPesel(90011250017L);
-        clientData.setPin(Bank.createPin());
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        session.saveOrUpdate(clientData);
-
-        session.getTransaction().commit();
-        session.close();
-
-
-
-        clientDataDao.deleteById(clientData.getId());
-      //  ClientData deleted = clientDataDao.findById(clientData.getId());
-
-
-        assertNull(clientDataDao.findById(clientData.getId()));
-
-    }
-
-    @Test
-    void findById() {
-
-        ClientData clientData = new ClientData();
-        clientData.setName("Anna");
-        clientData.setSurname("Nowak");
-        clientData.setPesel(90011250017L);
-        clientData.setPin(Bank.createPin());
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        session.saveOrUpdate(clientData);
-
-        session.getTransaction().commit();
-        session.close();
-
-        ClientData foundById = clientDataDao.findById(clientData.getId());
-
-        assertNotNull(foundById);
-        assertEquals(clientData.getId(), foundById.getId());
-        assertEquals(clientData.getName(), foundById.getName());
-        assertEquals(clientData.getSurname(), foundById.getSurname());
-        assertEquals(clientData.getPesel(), foundById.getPesel());
-        assertEquals(clientData.getPin(), foundById.getPin());
     }
 }

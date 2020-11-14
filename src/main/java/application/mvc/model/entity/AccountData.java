@@ -1,7 +1,6 @@
-package database.entity;
+package application.mvc.model.entity;
 
-import application.AccountType;
-import application.Client;
+import application.additional.AccountType;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;

@@ -14,8 +14,8 @@
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
 
-        <mapping class="database.entity.ClientData" />
-        <mapping class="database.entity.AccountData" />
+        <mapping class="application.mvc.model.entity.ClientData" />
+        <mapping class="application.mvc.model.entity.AccountData" />
 
     </session-factory>
 </hibernate-configuration>

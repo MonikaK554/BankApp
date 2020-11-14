@@ -1,4 +1,4 @@
-package application;
+package application.additional;
 
 public enum AccountType {
 

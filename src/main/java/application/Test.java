@@ -1,15 +1,17 @@
 package application;
 
-import database.databaseAdmin.DatabaseCustomizer;
-import database.utils.HibernateUtils;
-import org.hibernate.Session;
+import application.mvc.controller.Controller;
+import application.mvc.model.databaseAdmin.DatabaseCustomizer;
 
 public class Test {
     public static void main(String[] args) throws InterruptedException {
 
-       // DatabaseCustomizer.checkConnection();
-         DatabaseCustomizer.customizeDatabase();
-       // application.MainMethod.mainMethod();
+        //DatabaseCustomizer uruchamiany przy pierwszym uruchomieniu programu tylko
+        DatabaseCustomizer.checkConnection();
+        DatabaseCustomizer.customizeDatabase();
+
+        Controller controller = new Controller();
+        controller.start();
 
 
     }

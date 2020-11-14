@@ -1,5 +1,4 @@
-package database.entity;
-import application.Account;
+package application.mvc.model.entity;
 import com.sun.istack.NotNull;
 import javax.persistence.*;
 import java.util.List;

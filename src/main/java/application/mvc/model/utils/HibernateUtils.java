@@ -1,4 +1,4 @@
-package database.utils;
+package application.mvc.model.utils;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

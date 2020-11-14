@@ -1,13 +1,13 @@
-package database.daoImpl;
+package application.mvc.model.daoImpl;
 
-import application.Account;
-import application.AccountType;
-import application.Bank;
-import database.dao.AccountDataDao;
-import database.dao.ClientDataDao;
-import database.entity.AccountData;
-import database.entity.ClientData;
-import database.utils.HibernateUtils;
+import application.additional.Account;
+import application.additional.AccountType;
+import application.additional.Bank;
+import application.mvc.model.dao.AccountDataDao;
+import application.mvc.model.dao.ClientDataDao;
+import application.mvc.model.entity.AccountData;
+import application.mvc.model.entity.ClientData;
+import application.mvc.model.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AccountDataImplTest {
-
-    AccountDataDao accountDataDao = new AccountDataImpl();
-    ClientDataDao clientDataDao = new ClientDataImpl();
+class AccountModelTest {
+    AccountDataDao accountDataDao = new AccountModel();
+        ClientDataDao clientDataDao = new ClientModel();
 
     @BeforeEach
     void clearTable() {
@@ -36,7 +35,6 @@ class AccountDataImplTest {
 
     @Test
     void save() {
-
         ClientData clientData = new ClientData();
         clientData.setName("Anna");
         clientData.setSurname("Nowak");
@@ -60,6 +58,7 @@ class AccountDataImplTest {
         assertEquals(accountData.getAccountType(), saved.getAccountType());
         assertEquals(accountData.getBalance(), saved.getBalance());
         assertEquals(accountData.getAccountNumber(), saved.getAccountNumber());
+
     }
 
     @Test
@@ -97,6 +96,71 @@ class AccountDataImplTest {
         assertEquals(accountData.getBalance(), found.getBalance());
         assertEquals(accountData.getAccountNumber(), found.getAccountNumber());
 
+    }
+
+    @Test
+    void deleteAllAccountsWhileDeletingClient() {
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
+
+        clientDataDao.save(clientData);
+
+        AccountData accountData = new AccountData();
+        accountData.setClientData(clientData);
+        accountData.setAccountType(AccountType.PRO);
+        accountData.setBalance(new BigDecimal("1000.00"));
+        accountData.setAccountNumber(Account.createUniqueAccountNumber());
+
+        AccountData accountData1 = new AccountData();
+        accountData1.setClientData(clientData);
+        accountData1.setAccountType(AccountType.STUDENT);
+        accountData1.setBalance(new BigDecimal("500.00"));
+        accountData1.setAccountNumber(Account.createUniqueAccountNumber());
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        session.saveOrUpdate(accountData);
+        session.saveOrUpdate(accountData1);
+        session.getTransaction().commit();
+        session.close();
+
+       accountDataDao.deleteAllAccountsWhileDeletingClient(clientData.getId());
+
+       assertNull(clientData.getAccountList());
+
+
+    }
+
+    @Test
+    void deleteByAccountId() { // twporzymy wiersz AccountData, ale zeby go stworzyc to trzeba najpierw swtorzyc klienta
+
+        ClientData clientData = new ClientData();
+        clientData.setName("Anna");
+        clientData.setSurname("Nowak");
+        clientData.setPesel(90011250017L);
+        clientData.setPin(Bank.createPin());
+
+        clientDataDao.save(clientData);
+
+        AccountData accountData = new AccountData();
+        accountData.setClientData(clientData);
+        accountData.setAccountType(AccountType.PRO);
+        accountData.setBalance(new BigDecimal("1000.00"));
+        accountData.setAccountNumber(Account.createUniqueAccountNumber());
+
+        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        session.saveOrUpdate(accountData);
+        session.getTransaction().commit();
+        session.close();
+
+        accountDataDao.deleteByAccountId(accountData.getAccountId());
+        AccountData deleted = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
+
+        assertNull(deleted);
     }
 
     @Test
@@ -158,69 +222,5 @@ class AccountDataImplTest {
             assertEquals(accountData1.getBalance(), loaded.getBalance());
             assertEquals(accountData1.getAccountNumber(), loaded.getAccountNumber());
         }
-
-    }
-
-    @Test
-    void deleteByAccountId() { // twporzymy wiersz AccountData, ale zeby go stworzyc to trzeba najpierw swtorzyc klienta
-
-        ClientData clientData = new ClientData();
-        clientData.setName("Anna");
-        clientData.setSurname("Nowak");
-        clientData.setPesel(90011250017L);
-        clientData.setPin(Bank.createPin());
-
-        clientDataDao.save(clientData);
-
-        AccountData accountData = new AccountData();
-        accountData.setClientData(clientData);
-        accountData.setAccountType(AccountType.PRO);
-        accountData.setBalance(new BigDecimal("1000.00"));
-        accountData.setAccountNumber(Account.createUniqueAccountNumber());
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        session.saveOrUpdate(accountData);
-        session.getTransaction().commit();
-        session.close();
-
-        accountDataDao.deleteByAccountId(accountData.getAccountId());
-        AccountData deleted = accountDataDao.findByClientIdAnAccountId(clientData.getId(), accountData.getAccountId());
-
-        assertNull(deleted);
-    }
-
-    @Test
-    void deleteAllAccountsWhileDeletingClient() {
-        ClientData clientData = new ClientData();
-        clientData.setName("Anna");
-        clientData.setSurname("Nowak");
-        clientData.setPesel(90011250017L);
-        clientData.setPin(Bank.createPin());
-
-        clientDataDao.save(clientData);
-
-        AccountData accountData = new AccountData();
-        accountData.setClientData(clientData);
-        accountData.setAccountType(AccountType.PRO);
-        accountData.setBalance(new BigDecimal("1000.00"));
-        accountData.setAccountNumber(Account.createUniqueAccountNumber());
-
-        AccountData accountData1 = new AccountData();
-        accountData1.setClientData(clientData);
-        accountData1.setAccountType(AccountType.STUDENT);
-        accountData1.setBalance(new BigDecimal("500.00"));
-        accountData1.setAccountNumber(Account.createUniqueAccountNumber());
-
-        Session session = HibernateUtils.oneInstance().getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        session.saveOrUpdate(accountData);
-        session.saveOrUpdate(accountData1);
-        session.getTransaction().commit();
-        session.close();
-
-       accountDataDao.deleteAllAccountsWhileDeletingClient(clientData.getId());
-
-       assertNull(clientData.getAccountList());
     }
 }

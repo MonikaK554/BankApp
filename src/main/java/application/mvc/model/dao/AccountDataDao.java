@@ -1,6 +1,6 @@
-package database.dao;
+package application.mvc.model.dao;
 
-import database.entity.AccountData;
+import application.mvc.model.entity.AccountData;
 import java.util.List;
 
 public interface AccountDataDao {

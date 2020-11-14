@@ -1,12 +1,12 @@
-package database.databaseAdmin;
+package application.mvc.model.databaseAdmin;
 
-import database.utils.HibernateUtils;
+import application.mvc.model.utils.HibernateUtils;
 import org.hibernate.Session;
 
 public class DatabaseCustomizer {
 
     public static void checkConnection() {
-        HibernateUtils.oneInstance().getSessionFactory().close();
+        HibernateUtils.oneInstance().getSessionFactory().getCurrentSession().close();
     }
 
     public static void customizeDatabase() {
